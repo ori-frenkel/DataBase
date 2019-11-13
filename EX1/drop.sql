@@ -1,12 +1,14 @@
-DROP TABLE FlightInvitation cascade;
-DROP TABLE Person cascade;
-DROP TABLE Customer cascade;
-DROP TABLE Seat cascade;
-DROP TABLE NormalSeat cascade;
-DROP TABLE VIPSeat cascade;
-DROP TABLE AirPlane cascade;
-DROP TABLE Flight cascade;
-DROP TABLE Pilot cascade;
-DROP TABLE HasPilots cascade;
-DROP TABLE BIRTHDAY cascade;
-DROP TABLE Customer cascade;
+DROP TABLE HasPilots;
+DROP TABLE FlightInvitation;
+DROP TABLE VIPCustomer;
+DROP TABLE NormalCustomer;
+DROP TABLE VIPSeat;
+DROP TABLE NormalSeat;
+DROP TABLE Seat;
+DROP TABLE Flight;
+DROP TABLE AirPlane;
+DROP TABLE Pilot;
+DROP TABLE Customer;
+DROP TABLE BIRTHDAY;
+DROP TABLE Person;
+
