@@ -90,10 +90,11 @@ CREATE TABLE VIPCustomer(
   );
   
 CREATE TABLE FlightInvitation(
-  CustomerID INTEGER UNIQUE NOT NULL,
+  CustomerID INTEGER NOT NULL,
   Price INTEGER NOT NULL,
   FlightID INTEGER UNIQUE NOT NULL,
-  PRIMARY KEY(CustomerID, FlightID)
+  PRIMARY KEY(CustomerID, FlightID),
+  UNIQUE(CustomerID, FlightID)
   );
   
 CREATE TABLE HasPilots(
