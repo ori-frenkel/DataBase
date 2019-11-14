@@ -15,7 +15,7 @@ CREATE TABLE Customer(
   ID INTEGER UNIQUE NOT NULL PRIMARY KEY,
   PhoneNumber INTEGER NOT NULL,
   FOREIGN KEY (ID) REFERENCES Person(ID)
-  );
+  ); 
   
 CREATE TABLE HasBday(
   CustomerID INTEGER UNIQUE NOT NULL PRIMARY KEY,
@@ -47,38 +47,45 @@ CREATE TABLE Flight(
 CREATE TABLE Seat(
   SeatRow INTEGER NOT NULL,
   SeatAisle INTEGER NOT NULL,
-  PRIMARY KEY(SeatRow, SeatAisle),
-  UNIQUE (SeatRow, SeatAisle)
+  UNIQUE (SeatRow, SeatAisle),
+  PRIMARY KEY(SeatRow, SeatAisle)
   );
   
 Create TABLE NormalSeat(
-  NormalRow INTEGER UNIQUE NOT NULL,
-  NormalAisle INTEGER UNIQUE NOT NULL,
-  FOREIGN KEY (NormalRow) REFERENCES Seat(SeatRow),
-  FOREIGN KEY (NormalAisle) REFERENCES Seat(SeatAisle),
+  NormalRow INTEGER NOT NULL,
+  NormalAisle INTEGER NOT NULL,
+  FOREIGN KEY (NormalRow, NormalAisle) REFERENCES Seat(SeatRow, SeatAisle),
+  UNIQUE(NormalRow, NormalAisle),
   PRIMARY KEY(NormalRow, NormalAisle)
   );
 
 Create TABLE VIPSeat(
-  VipRow INTEGER UNIQUE NOT NULL,
-  VIPAisle INTEGER UNIQUE NOT NULL,
-  FOREIGN KEY (VipRow) REFERENCES Seat(SeatRow),
-  FOREIGN KEY (VIPAisle) REFERENCES Seat(SeatAisle),
+  VipRow INTEGER NOT NULL,
+  VIPAisle INTEGER NOT NULL,
+  FOREIGN KEY (VipRow, VIPAisle) REFERENCES Seat(SeatRow, SeatAisle),
+  UNIQUE(VipRow, VIPAisle),
   PRIMARY KEY(VipRow, VIPAisle)
   );
   
 CREATE TABLE NormalCustomer(
   ID INTEGER UNIQUE NOT NULL PRIMARY KEY,
   PhoneNumber INTEGER NOT NULL,
-  FOREIGN KEY (ID) REFERENCES Customer(ID),
-  FOREIGN KEY (PhoneNumber) REFERENCES Customer(PhoneNumber)
+  NormalSeatRow INTEGER UNIQUE NOT NULL,
+  NormalSeatAisle INTEGER UNIQUE NOT NULL,
+  FOREIGN KEY (NormalSeatRow, NormalSeatAisle) REFERENCES NormalSeat(NormalRow, NormalAisle),
+  UNIQUE(NormalSeatRow, NormalSeatAisle),
+  FOREIGN KEY (ID) REFERENCES Customer(ID)
   );
-
+  
 CREATE TABLE VIPCustomer(
   ID INTEGER UNIQUE NOT NULL PRIMARY KEY,
   Points INTEGER NOT NULL,
   PhoneNumber INTEGER NOT NULL,
-  FOREIGN KEY (ID, PhoneNumber) REFERENCES Customer(ID, PhoneNumber),
+  SeatRow INTEGER UNIQUE NOT NULL,
+  SeatAisle INTEGER UNIQUE NOT NULL,
+  FOREIGN KEY (SeatRow, SeatAisle) REFERENCES Seat(SeatRow, SeatAisle),
+  UNIQUE(SeatRow, SeatAisle),
+  FOREIGN KEY (ID) REFERENCES Customer(ID),
   CHECK (VIPCustomer.points>=0)
   );
   
@@ -93,6 +100,6 @@ CREATE TABLE HasPilots(
   PilotID INTEGER NOT NULL,
   FlightID INTEGER NOT NULL,
   FOREIGN KEY (PilotID) REFERENCES Pilot(ID),
-  FOREIGN KEY (FlightID) REFERENCES Flight(FlightID)
+  FOREIGN KEY (FlightID) REFERENCES Flight(FlightID),
   PRIMARY KEY (PilotID, FlightID)
   );
