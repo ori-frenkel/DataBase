@@ -94,6 +94,8 @@ CREATE TABLE FlightInvitation(
   Price INTEGER NOT NULL,
   FlightID INTEGER UNIQUE NOT NULL,
   PRIMARY KEY(CustomerID, FlightID),
+  FOREIGN KEY (CustomerID) REFERENCES Customer(ID),
+  FOREIGN KEY (FlightID) REFERENCES Flight(FlightID),
   UNIQUE(CustomerID, FlightID),
   CHECK (FlightInvitation.Price>=0)
   );
