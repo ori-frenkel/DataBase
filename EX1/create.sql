@@ -7,7 +7,8 @@ CREATE TABLE BIRTHDAY(
   BDAY INTEGER,
   BMONTH INTEGER,
   BYEAR INTEGER,
-  PRIMARY KEY (BDAY, BMONTH, BYEAR)
+  PRIMARY KEY (BDAY, BMONTH, BYEAR),
+  CHECK(BDAY>0 AND BMONTH>0 AND BDAY<32 AND BMONTH<32)
   );
   
 CREATE TABLE Customer(
@@ -17,7 +18,7 @@ CREATE TABLE Customer(
   );
   
 CREATE TABLE HasBday(
-  CustomerID INTEGER UNIQUE NOT NULL PRIMARY KEY
+  CustomerID INTEGER UNIQUE NOT NULL PRIMARY KEY,
   Bday INTEGER NOT NULL,
   Bmonth INTEGER NOT NULL,
   Byear INTEGER NOT NULL,
@@ -44,9 +45,10 @@ CREATE TABLE Flight(
   );
 
 CREATE TABLE Seat(
-  SeatRow INTEGER UNIQUE NOT NULL,
-  SeatAisle INTEGER UNIQUE NOT NULL,
-  PRIMARY KEY(SeatRow, SeatAisle)
+  SeatRow INTEGER NOT NULL,
+  SeatAisle INTEGER NOT NULL,
+  PRIMARY KEY(SeatRow, SeatAisle),
+  UNIQUE (SeatRow, SeatAisle)
   );
   
 Create TABLE NormalSeat(
@@ -67,24 +69,17 @@ Create TABLE VIPSeat(
   
 CREATE TABLE NormalCustomer(
   ID INTEGER UNIQUE NOT NULL PRIMARY KEY,
-  NormalSeatRow INTEGER UNIQUE NOT NULL,
-  NormalSeatAisle INTEGER UNIQUE NOT NULL,
   PhoneNumber INTEGER NOT NULL,
   FOREIGN KEY (ID) REFERENCES Customer(ID),
-  FOREIGN KEY (NormalSeatRow) REFERENCES NormalSeat(NormalRow),
-  FOREIGN KEY (NormalSeatAisle) REFERENCES NormalSeat(NormalAisle)
+  FOREIGN KEY (PhoneNumber) REFERENCES Customer(PhoneNumber)
   );
-  
+
 CREATE TABLE VIPCustomer(
   ID INTEGER UNIQUE NOT NULL PRIMARY KEY,
   Points INTEGER NOT NULL,
-  SeatRow INTEGER UNIQUE NOT NULL,
-  SeatAisle INTEGER UNIQUE NOT NULL,
   PhoneNumber INTEGER NOT NULL,
-  FOREIGN KEY (ID) REFERENCES Customer(ID),
-  FOREIGN KEY (SeatRow) REFERENCES NormalSeat(NormalRow),
-  FOREIGN KEY (SeatAisle) REFERENCES NormalSeat(NormalAisle),
-  CHECK (vipcustomer.points>=0)
+  FOREIGN KEY (ID, PhoneNumber) REFERENCES Customer(ID, PhoneNumber),
+  CHECK (VIPCustomer.points>=0)
   );
   
 CREATE TABLE FlightInvitation(
