@@ -92,6 +92,6 @@ CREATE TABLE HasPilots(
   PilotID INTEGER NOT NULL,
   FlightID INTEGER NOT NULL,
   FOREIGN KEY (PilotID) REFERENCES Pilot(ID),
-  FOREIGN KEY (FlightID) REFERENCES Flight(FlightID)
+  FOREIGN KEY (FlightID) REFERENCES Flight(FlightID),
   PRIMARY KEY (PilotID, FlightID)
   );
