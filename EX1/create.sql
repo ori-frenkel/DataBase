@@ -67,6 +67,7 @@ CREATE TABLE NormalCustomer(
   ID INTEGER UNIQUE NOT NULL PRIMARY KEY,
   NormalSeatRow INTEGER UNIQUE NOT NULL,
   NormalSeatAisle INTEGER UNIQUE NOT NULL,
+  PhoneNumber INTEGER NOT NULL,
   FOREIGN KEY (ID) REFERENCES Customer(ID),
   FOREIGN KEY (NormalSeatRow) REFERENCES NormalSeat(NormalRow),
   FOREIGN KEY (NormalSeatAisle) REFERENCES NormalSeat(NormalAisle)
@@ -77,6 +78,7 @@ CREATE TABLE VIPCustomer(
   Points INTEGER NOT NULL,
   SeatRow INTEGER UNIQUE NOT NULL,
   SeatAisle INTEGER UNIQUE NOT NULL,
+  PhoneNumber INTEGER NOT NULL,
   FOREIGN KEY (ID) REFERENCES Customer(ID),
   FOREIGN KEY (SeatRow) REFERENCES NormalSeat(NormalRow),
   FOREIGN KEY (SeatAisle) REFERENCES NormalSeat(NormalAisle),
