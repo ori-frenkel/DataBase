@@ -1,11 +1,10 @@
-SELECT (pid,pname)
+SELECT Visit.pid,pname
 FROM Doctor, Patient, Visit
 WHERE Doctor.did=Visit.did and Patient.pid=Visit.pid and
-Doctor.specialty="pediatrician"
-ORDER BY (pid,pname) ASC
+Doctor.specialty='pediatrician'
 INTERSECT
-SELECT (pid,pname)
+SELECT Visit.pid,pname
 FROM Doctor, Patient, Visit
 WHERE Doctor.did=Visit.did and Patient.pid=Visit.pid and
-Doctor.specialty="orthopedist";
-ORDER BY (pid,pname) ASC;
+Doctor.specialty='orthopedist'
+ORDER BY pid,pname ASC;
