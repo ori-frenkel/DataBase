@@ -1,0 +1,5 @@
+SELECT pid,did
+FROM Doctor NATURAL JOIN Patient
+EXCEPT
+SELECT pid,did
+FROM Visit NATURAL JOIN Patient;
