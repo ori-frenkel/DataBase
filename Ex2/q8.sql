@@ -1,4 +1,3 @@
--- todo, need to handle case where same person came few time to the doc.
 CREATE VIEW Doc_Avg_Pbmi AS
 	SELECT did, AVG(bmi) as doc_avg_bmi
     FROM Patient NATURAL JOIN Visit
