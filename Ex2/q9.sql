@@ -1,8 +1,8 @@
 UPDATE Doctor
 SET clinic =(
   CASE 
-  	WHEN clinic=0 THEN 1
-  	WHEN clinic=1 THEN 0
+  	WHEN clinic=1 THEN 2
+  	WHEN clinic=2 THEN 1
     ELSE clinic
   END)
-  WHERE clinic IN (0,1);
+  WHERE clinic IN (1,2);
