@@ -7,3 +7,4 @@ SELECT did
 FROM Doc_Avg_Pbmi
 WHERE doc_avg_bmi = (SELECT MAX(doc_avg_bmi) FROM Doc_Avg_Pbmi)
 ORDER BY did ASC;
+DROP VIEW Doc_Avg_Pbmi;
