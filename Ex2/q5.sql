@@ -18,4 +18,6 @@ WHERE NOT EXISTS (
                                      SELECT *
                                      FROM PART1 AS z
                                      WHERE (z.did=x.did) AND(z.pid=y.pid)))
-ORDER BY x.dname ASC;                                                             
+ORDER BY x.dname ASC;
+DROP VIEW PART1;
+DROP VIEW PART2; 
