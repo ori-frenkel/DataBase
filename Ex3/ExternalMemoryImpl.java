@@ -36,7 +36,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 		File tmp_sorted_blocks = null;
 		try {
 			tmp_sorted_blocks = File.createTempFile("TempFileMaine", ".txt", new File(tmpPath));
-//			tmp_sorted_blocks.deleteOnExit();
+			tmp_sorted_blocks.deleteOnExit();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -46,6 +46,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 			String line;
 			int count = 0;
 			ArrayList<String> line_in_buffer = new ArrayList<String>();
+			assert tmp_sorted_blocks != null;
 			BufferedWriter bw = new BufferedWriter(new FileWriter(tmp_sorted_blocks, true));
 			while((line = br.readLine()) != null){
 				line_in_buffer.add(line);
