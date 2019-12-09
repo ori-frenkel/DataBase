@@ -89,6 +89,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 					line_in_buffer.clear();
 				}
 			}
+
 			// in case the last buffer contain less than full buffer length
 			if (line_in_buffer.size() > 0)
 			{
@@ -157,7 +158,15 @@ public class ExternalMemoryImpl extends IExternalMemory {
 				bw.write(oneBlockOutPut.get(j) + "\n");
 				System.out.println("Wrote : "+ oneBlockOutPut.get(j));
 			}
+			// freeing up everything.
 			bw.close();
+			for(int i = 0; i < numberOfBuffer; i++)
+			{
+				blocks.get(i).close();
+			}
+			blocks.clear();
+			currArr.clear();
+			oneBlockOutPut.clear();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
