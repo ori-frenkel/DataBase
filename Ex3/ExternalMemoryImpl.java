@@ -54,7 +54,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 
 
 
-		// TODO: Implement
+		// TODO: Implement Part A
 		// STEP1 - reading line to buffer less than 50mb (buffer size) sorting them and write to disk
 		// the number of line that would be ~50 mb
 		ArrayList<BufferedReader> blocks = new ArrayList<>();
@@ -177,7 +177,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 	@Override
 	protected void join(String in1, String in2, String out, String tmpPath)
 	{
-		// TODO
+		// TODO implement Part B
 		try
 		{
 			final int blockSize = 4096; // 4kb
@@ -274,8 +274,51 @@ public class ExternalMemoryImpl extends IExternalMemory {
 
 	@Override
 	protected void select(String in, String out, String substrSelect, String tmpPath) {
+		// TODO : implement part C
+		try
+		{
+			final int blockSize = 4096; // 4kb
+			final int sizeOfOneLine = 52;
+			final int lineInOneBlock = blockSize / sizeOfOneLine;
+			ArrayList<String> outPutBlock = new ArrayList<>(lineInOneBlock);
+			BufferedWriter bw = new BufferedWriter(new FileWriter(out));
+			BufferedReader br = new BufferedReader(new FileReader(in), blockSize);
+			String line;
+			while((line = br.readLine()) != null)
+			{
+				if(line.split("\\s")[0].contains(substrSelect))
+				{
+					outPutBlock.add(line);
+					// if output block is full, flush it to disk and clear it.
+					if(outPutBlock.size() == lineInOneBlock)
+					{
+						for(int j = 0; j < lineInOneBlock; ++j)
+						{
+							bw.write(outPutBlock.get(j) + "\n");
+							System.out.println("New Wrote New: "+ outPutBlock.get(j));
+						}
+						outPutBlock.clear();
+					}
+				}
+			}
 
-		// TODO Auto-generated method stub
+			if(outPutBlock.size() != 0)
+			{
+				for(int j = 0; j < outPutBlock.size(); j++)
+				{
+					bw.write(outPutBlock.get(j) + "\n");
+					System.out.println("New Wrote New: "+ outPutBlock.get(j));
+				}
+				outPutBlock.clear();
+			}
+			outPutBlock.clear();
+			br.close();
+			bw.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 
 	}
 
