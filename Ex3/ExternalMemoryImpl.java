@@ -189,7 +189,9 @@ public class ExternalMemoryImpl extends IExternalMemory {
 			BufferedReader ts = new BufferedReader(new FileReader(in2), blockSize);
 			BufferedReader gs = new BufferedReader(new FileReader(in2), blockSize);
 			String lineTr, lineGs, lineTs = "";
-			while((lineTr = tr.readLine()) != null && (lineGs = gs.readLine()) != null)
+			lineTr = tr.readLine();
+			lineGs = gs.readLine();
+			while(lineTr != null && lineGs != null)
 			{
 				// while tr != EOF and lineTr.idx < lineGs.idx
 				while (lineTr != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) < 0))
