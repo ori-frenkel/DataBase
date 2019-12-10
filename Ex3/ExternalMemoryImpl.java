@@ -326,31 +326,108 @@ public class ExternalMemoryImpl extends IExternalMemory {
 	public void joinAndSelectEfficiently(String in1, String in2, String out,
 										 String substrSelect, String tmpPath) {
 
-		// TODO Auto-generated method stub
+		// TODO implement part D
+		try
+		{
+			final int blockSize = 4096; // 4kb
+			final int sizeOfOneLine = 52;
+			final int lineInOneBlock = blockSize / sizeOfOneLine;
+			ArrayList<String> outPutBlock = new ArrayList<>(lineInOneBlock);
+			BufferedWriter bw = new BufferedWriter(new FileWriter(out));
+			BufferedReader tr = new BufferedReader(new FileReader(in1), blockSize);
+			BufferedReader ts = new BufferedReader(new FileReader(in2), blockSize);
+			BufferedReader gs = new BufferedReader(new FileReader(in2), blockSize);
+			String lineTr, lineGs, lineTs = "";
+			lineTr = tr.readLine();
+			lineGs = gs.readLine();
+			while(lineTr != null && lineGs != null)
+			{
+				// while tr != EOF and lineTr.idx < lineGs.idx
+				while (lineTr != null &&
+						(lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) < 0))
+				{
+					lineTr = tr.readLine();
+				}
+				// if the line isn't substring of the select, move to the next line.
+				while(lineTr != null && !lineTr.split("\\s")[0].contains(substrSelect))
+				{
+					lineTr = tr.readLine();
+				}
 
+				// while gs != EOF and lineTr.idx > lineGs.idx
+				while (lineTr != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) > 0))
+				{
+					lineGs = gs.readLine();
+				}
+				while(!lineTs.equals(lineGs))
+				{
+					lineTs = ts.readLine();
+				}
+
+				while(!lineTs.equals(lineGs))
+				{
+					lineTs = ts.readLine();
+				}
+				ts.mark(1);
+				String curr = lineTs;
+				while(lineTr != null && lineTr.split("\\s")[0].equals(lineGs.split("\\s")[0]))
+				{ //1
+					//TS = GS
+					lineTs = curr;
+					ts.reset();
+					// while ts != eof and lineTs.idx == lineTr.idx
+					while(lineTs != null && lineTs.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) == 0)
+					{
+						// join the two lines
+						outPutBlock.add(lineTr + lineTs.substring(lineTs.indexOf(" ")));
+						lineTs = ts.readLine();
+
+						// if output block is full, flush it to disk and clear it.
+						if(outPutBlock.size() == lineInOneBlock)
+						{
+							for(int j = 0; j < lineInOneBlock; ++j)
+							{
+								bw.write(outPutBlock.get(j) + "\n");
+								System.out.println("New Wrote New: "+ outPutBlock.get(j));
+							}
+							outPutBlock.clear();
+						}
+					}
+					do {
+						lineTr = tr.readLine();
+					}
+					while(!lineTr.split("\\s")[0].contains(substrSelect));
+
+				} //1
+				// GS = TS
+				while(!lineGs.equals(lineTs))
+				{
+					lineGs = gs.readLine();
+					if(lineGs == null)
+					{
+						break;
+					}
+				}
+			}
+
+			if(outPutBlock.size() != 0)
+			{
+				for(int j = 0; j < outPutBlock.size(); j++)
+				{
+					bw.write(outPutBlock.get(j) + "\n");
+					System.out.println("New Wrote New: "+ outPutBlock.get(j));
+				}
+				outPutBlock.clear();
+			}
+			outPutBlock.clear();
+			bw.close();
+			tr.close();
+			ts.close();
+			gs.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-}
-
-class Line{
-	private String idx;
-	private String seq1, seq2;
-	Line(String idx, String seq1, String seq2)
-	{
-		this.idx = idx;
-		this.seq1 = seq1;
-		this.seq2 = seq2;
-	}
-
-	public String getIdx(){
-		return this.idx;
-	}
-
-	public String getSeq1() {
-		return seq1;
-	}
-
-	public String getSeq2() {
-		return seq2;
-	}
 }
