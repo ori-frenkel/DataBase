@@ -172,76 +172,103 @@ public class ExternalMemoryImpl extends IExternalMemory {
 		}
 
 
-//		try {
-//			BufferedWriter bw = new BufferedWriter(new FileWriter(out, true));
-//			int numberOfBlocks = (int) Math.ceil((double)totalNumberOfLines / lineInBlocks);
-//			System.out.println("Number of blocks : " + numberOfBlocks);
-////			ArrayList<String> line_in_buffer = new ArrayList<String>();
-//			BufferedReader[] blocksArr = new BufferedReader[numberOfBlocks];
-//			int[] currentLineInBlock = new int[numberOfBlocks];
-//			ArrayList<String> mainMemory = new ArrayList<String>();
-//			for(int i = 0; i < numberOfBlocks; i++)
-//			{
-//				assert tmp_sorted_blocks != null;
-//				// buffer contain only the first line of block
-//				blocksArr[i] = new BufferedReader(new FileReader(tmp_sorted_blocks), max_size_of_line);
-//				// making the buffer to point to the start of the  block
-//				for(int j = 0; j < i * lineInBlocks; j++)
-//				{
-//					blocksArr[i].readLine();
-//				}
-//				currentLineInBlock[i] = 1;
-//				mainMemory.add(blocksArr[i].readLine());
-//
-//
-//			}
-//			// Block number where the min string is
-//			int minIndex = mainMemory.indexOf(Collections.min(mainMemory));
-//			bw.write(mainMemory.get(minIndex)); // writing the min line in main memory to output
-//			mainMemory.set(minIndex, blocksArr[minIndex].readLine()); // moving the written line in memory
-//																	  // to the next line
-//			currentLineInBlock[minIndex]++;
-//
-//
-//		}
-//		catch (IOException e) {
-//			e.printStackTrace();
-//		}
-
-
-
-
-
-
-
-//		int numberOfBlocks = (int) Math.ceil((double)totalNumberOfLines / lineInBuffer);
-//		System.out.println("Number of blocks : " + numberOfBlocks);
-//		int[] blocksArray = new int[numberOfBlocks]; // array that contain the line in each block we are currently
-//		Arrays.fill(blocksArray, 1); // all blocks start from line 2
-//		int numberOfBlocksFinishedToSort = 0;
-//		ArrayList<String> line_in_buffer = new ArrayList<String>();
-//		for(int blockNum = 0; blockNum < numberOfBlocks; blockNum++)
-//		{
-//			assert tmp_sorted_blocks != null;
-//			line_in_buffer.add(getLine(blockNum, 1, lineInBuffer, tmp_sorted_blocks.getAbsolutePath()));
-//			System.out.println( " Added to buff " + line_in_buffer.get(line_in_buffer.size() - 1));
-//		}
-//		while(numberOfBlocksFinishedToSort != totalNumberOfLines)
-//		{
-//			for(int i = 0; i < numberOfBlocks; i++)
-//			{
-//
-//			}
-//		}
-
 	}
 
 	@Override
-	protected void join(String in1, String in2, String out, String tmpPath) {
+	protected void join(String in1, String in2, String out, String tmpPath)
+	{
+		// TODO
+		try
+		{
+			final int blockSize = 4096; // 4kb
+			final int sizeOfOneLine = 52;
+			final int lineInOneBlock = blockSize / sizeOfOneLine;
+			ArrayList<String> outPutBlock = new ArrayList<>(lineInOneBlock);
+			BufferedWriter bw = new BufferedWriter(new FileWriter(out));
+			BufferedReader tr = new BufferedReader(new FileReader(in1), blockSize);
+			BufferedReader ts = new BufferedReader(new FileReader(in2), blockSize);
+			BufferedReader gs = new BufferedReader(new FileReader(in2), blockSize);
+			String lineTr, lineGs, lineTs = "";
+			while((lineTr = tr.readLine()) != null && (lineGs = gs.readLine()) != null)
+			{
+				// while tr != EOF and lineTr.idx < lineGs.idx
+				while (lineTr != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) < 0))
+				{
+					lineTr = tr.readLine();
+				}
+				// while gs != EOF and lineTr.idx > lineGs.idx
+				while (lineTr != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) > 0))
+				{
+					lineGs = gs.readLine();
+				}
+				while(!lineTs.equals(lineGs))
+				{
+					lineTs = ts.readLine();
+				}
 
-		// TODO Auto-generated method stub
+				while(!lineTs.equals(lineGs))
+				{
+					lineTs = ts.readLine();
+				}
+				ts.mark(1);
+				String curr = lineTs;
+				while(lineTr != null && lineTr.split("\\s")[0].equals(lineGs.split("\\s")[0]))
+				{ //1
+					//TS = GS
+					lineTs = curr;
+					ts.reset();
+					// while ts != eof and lineTs.idx == lineTr.idx
+					while(lineTs != null && lineTs.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) == 0)
+					{
+						// join the two lines
+						outPutBlock.add(lineTr + lineTs.substring(lineTs.indexOf(" ")));
+						lineTs = ts.readLine();
 
+						// if output block is full, flush it to disk and clear it.
+						if(outPutBlock.size() == lineInOneBlock)
+						{
+							for(int j = 0; j < lineInOneBlock; ++j)
+							{
+								bw.write(outPutBlock.get(j) + "\n");
+								System.out.println("New Wrote New: "+ outPutBlock.get(j));
+							}
+							outPutBlock.clear();
+						}
+					}
+					lineTr = tr.readLine();
+				} //1
+				// GS = TS
+				while(!lineGs.equals(lineTs))
+				{
+					lineGs = gs.readLine();
+					if(lineGs == null)
+					{
+						break;
+					}
+				}
+			}
+
+			if(outPutBlock.size() != 0)
+			{
+				for(int j = 0; j < outPutBlock.size(); j++)
+				{
+					bw.write(outPutBlock.get(j) + "\n");
+					System.out.println("New Wrote New: "+ outPutBlock.get(j));
+				}
+				outPutBlock.clear();
+			}
+			outPutBlock.clear();
+			bw.close();
+			tr.close();
+			ts.close();
+			gs.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
+
+
 
 	@Override
 	protected void select(String in, String out, String substrSelect, String tmpPath) {
