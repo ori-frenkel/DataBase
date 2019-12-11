@@ -211,10 +211,6 @@ public class ExternalMemoryImpl extends IExternalMemory {
 					lineTs = ts.readLine();
 				}
 
-				while(!lineTs.equals(lineGs))
-				{
-					lineTs = ts.readLine();
-				}
 				ts.mark(1);
 				String curr = lineTs;
 				while(lineTr != null && lineTr.split("\\s")[0].equals(lineGs.split("\\s")[0]))
@@ -262,7 +258,6 @@ public class ExternalMemoryImpl extends IExternalMemory {
 				}
 				outPutBlock.clear();
 			}
-			outPutBlock.clear();
 			bw.close();
 			tr.close();
 			ts.close();
@@ -367,10 +362,6 @@ public class ExternalMemoryImpl extends IExternalMemory {
 					lineTs = ts.readLine();
 				}
 
-				while(!lineTs.equals(lineGs))
-				{
-					lineTs = ts.readLine();
-				}
 				ts.mark(1);
 				String curr = lineTs;
 				while(lineTr != null && lineTr.split("\\s")[0].equals(lineGs.split("\\s")[0]))
@@ -422,7 +413,6 @@ public class ExternalMemoryImpl extends IExternalMemory {
 				}
 				outPutBlock.clear();
 			}
-			outPutBlock.clear();
 			bw.close();
 			tr.close();
 			ts.close();
