@@ -59,7 +59,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 		// the number of line that would be ~50 mb
 		ArrayList<BufferedReader> blocks = new ArrayList<>();
 		final int sizeOfOneLine = 52;
-		int lineInBuffer = 2; // the number of lines in buffer/block (at this stage same)
+		int lineInBuffer = 230000; // the number of lines in buffer/block (at this stage same)
 		int buffer_size = lineInBuffer * sizeOfOneLine; // the buffer it bytes
 		int fullBlock = 4096; // 4kb
 		int lineInOneBlock = fullBlock / sizeOfOneLine;
@@ -70,19 +70,22 @@ public class ExternalMemoryImpl extends IExternalMemory {
 			BufferedReader br = new BufferedReader(new FileReader(in), buffer_size);
 			String line;
 			ArrayList<String> line_in_buffer = new ArrayList<String>();
-			while((line = br.readLine()) != null){
+			while((line = br.readLine()) != null)
+			{
 				line_in_buffer.add(line);
 				totalNumberOfLines++;
-				if (totalNumberOfLines % lineInBuffer == 0){ // if got to end of block
+				if (totalNumberOfLines % lineInBuffer == 0)
+				{ // if got to end of block
 					// sorting and writing to tmp file.
 					Collections.sort(line_in_buffer); // sorting the lines
 					// writing then to tmp file.
 					File tmp_sorted_blocks = File.createTempFile("TempFileMaineA", ".txt", new File(tmpPath));
 					tmp_sorted_blocks.deleteOnExit();
 					BufferedWriter bw = new BufferedWriter(new FileWriter(tmp_sorted_blocks, true));
-					for(String _line : line_in_buffer){
+					for(String _line : line_in_buffer)
+					{
 						bw.write(_line + "\n");
-						System.out.println("Writing : \n" +  _line);
+//						System.out.println("Writing : \n" +  _line);
 					}
 					bw.close();
 					blocks.add(new BufferedReader(new FileReader(tmp_sorted_blocks), fullBlock));
@@ -101,7 +104,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 
 				for(String _line : line_in_buffer){
 					bw.write(_line + "\n");
-					System.out.println("Writing : \n" +  _line);
+//					System.out.println("Writing : \n" +  _line);
 				}
 				line_in_buffer.clear();
 				bw.close();
@@ -138,10 +141,10 @@ public class ExternalMemoryImpl extends IExternalMemory {
 				// if output block is full, flush it to disk and clear it.
 				if(oneBlockOutPut.size() == lineInOneBlock)
 				{
-					for(int j = 0; j < lineInBuffer; ++j)
+					for(int j = 0; j < lineInOneBlock; ++j)
 					{
 						bw.write(oneBlockOutPut.get(j) + "\n");
-						System.out.println("Wrote : "+ oneBlockOutPut.get(j));
+//						System.out.println("Wrote : "+ oneBlockOutPut.get(j));
 					}
 					oneBlockOutPut.clear();
 				}
@@ -156,7 +159,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 			for(int j = 0; j < oneBlockOutPut.size(); ++j)
 			{
 				bw.write(oneBlockOutPut.get(j) + "\n");
-				System.out.println("Wrote : "+ oneBlockOutPut.get(j));
+//				System.out.println("Wrote : "+ oneBlockOutPut.get(j));
 			}
 			// freeing up everything.
 			bw.close();
@@ -232,7 +235,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 							for(int j = 0; j < lineInOneBlock; ++j)
 							{
 								bw.write(outPutBlock.get(j) + "\n");
-								System.out.println("New Wrote New: "+ outPutBlock.get(j));
+//								System.out.println("New Wrote New: "+ outPutBlock.get(j));
 							}
 							outPutBlock.clear();
 						}
@@ -255,7 +258,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 				for(int j = 0; j < outPutBlock.size(); j++)
 				{
 					bw.write(outPutBlock.get(j) + "\n");
-					System.out.println("New Wrote New: "+ outPutBlock.get(j));
+//					System.out.println("New Wrote New: "+ outPutBlock.get(j));
 				}
 				outPutBlock.clear();
 			}
@@ -295,7 +298,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 						for(int j = 0; j < lineInOneBlock; ++j)
 						{
 							bw.write(outPutBlock.get(j) + "\n");
-							System.out.println("New Wrote New: "+ outPutBlock.get(j));
+//							System.out.println("New Wrote New: "+ outPutBlock.get(j));
 						}
 						outPutBlock.clear();
 					}
@@ -307,7 +310,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 				for(int j = 0; j < outPutBlock.size(); j++)
 				{
 					bw.write(outPutBlock.get(j) + "\n");
-					System.out.println("New Wrote New: "+ outPutBlock.get(j));
+//					System.out.println("New Wrote New: "+ outPutBlock.get(j));
 				}
 				outPutBlock.clear();
 			}
@@ -388,7 +391,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 							for(int j = 0; j < lineInOneBlock; ++j)
 							{
 								bw.write(outPutBlock.get(j) + "\n");
-								System.out.println("New Wrote New: "+ outPutBlock.get(j));
+//								System.out.println("New Wrote New: "+ outPutBlock.get(j));
 							}
 							outPutBlock.clear();
 						}
@@ -415,7 +418,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 				for(int j = 0; j < outPutBlock.size(); j++)
 				{
 					bw.write(outPutBlock.get(j) + "\n");
-					System.out.println("New Wrote New: "+ outPutBlock.get(j));
+//					System.out.println("New Wrote New: "+ outPutBlock.get(j));
 				}
 				outPutBlock.clear();
 			}
