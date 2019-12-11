@@ -202,7 +202,8 @@ public class ExternalMemoryImpl extends IExternalMemory {
 					lineTr = tr.readLine();
 				}
 				// while gs != EOF and lineTr.idx > lineGs.idx
-				while (lineGs != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) > 0))
+				while (lineGs != null && lineTr != null &&
+						(lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) > 0))
 				{
 					lineGs = gs.readLine();
 				}
@@ -368,13 +369,15 @@ public class ExternalMemoryImpl extends IExternalMemory {
 					}
 				}
 				// while tr != EOF and lineTr.idx < lineGs.idx
-				while (lineTr != null && lineGs != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) < 0))
+				while (lineTr != null && lineGs != null &&
+						(lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) < 0))
 				{
 					lineTr = tr.readLine();
 				}
 
 				// while gs != EOF and lineTr.idx > lineGs.idx
-				while (lineGs != null && lineTr != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) > 0))
+				while (lineGs != null && lineTr != null &&
+						(lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) > 0))
 				{
 					lineGs = gs.readLine();
 				}
@@ -390,7 +393,8 @@ public class ExternalMemoryImpl extends IExternalMemory {
 					lineTs = curr;
 					ts.reset();
 					// while ts != eof and lineTs.idx == lineTr.idx
-					while (lineTs != null && lineTs.split("\\s")[0].contains(substrSelect) && lineTs.split("\\s")[0].compareTo(lineTr.split("\\s")[0]) == 0) {
+					while (lineTs != null && lineTs.split("\\s")[0].contains(substrSelect) &&
+							lineTs.split("\\s")[0].compareTo(lineTr.split("\\s")[0]) == 0) {
 						// join the two lines
 						outPutBlock.add(lineTr + lineTs.substring(lineTs.indexOf(" ")));
 						lineTs = ts.readLine();
