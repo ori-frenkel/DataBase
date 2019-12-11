@@ -325,8 +325,7 @@ public class ExternalMemoryImpl extends IExternalMemory {
 										 String substrSelect, String tmpPath) {
 
 		// TODO implement part D
-		try
-		{
+		try {
 			final int blockSize = 4096; // 4kb
 			final int sizeOfOneLine = 52;
 			final int lineInOneBlock = blockSize / sizeOfOneLine;
@@ -338,76 +337,72 @@ public class ExternalMemoryImpl extends IExternalMemory {
 			String lineTr, lineGs, lineTs = "";
 			lineTr = tr.readLine();
 			lineGs = gs.readLine();
-			while(lineTr != null && lineGs != null)
-			{
+			while (lineTr != null && lineGs != null) {
+				// lineTr.idx < lineGs.idx
+				if(lineTr != null && (lineTr.compareTo(lineGs) < 0))
+				{
+					while (lineGs != null && !(lineGs.split("\\s")[0].contains(substrSelect)))
+					{
+						lineGs = gs.readLine();
+					}
+				}
+				// lineTr.idx > lineGs.idx
+				if (lineGs != null && (lineTr.compareTo(lineGs) > 0))
+				{
+					while (lineTr != null && !(lineTr.split("\\s")[0].contains(substrSelect)))
+					{
+						lineTr = tr.readLine();
+					}
+				}
 				// while tr != EOF and lineTr.idx < lineGs.idx
-				while (lineTr != null &&
-						(lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) < 0))
+				while (lineTr != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) < 0))
 				{
 					lineTr = tr.readLine();
 				}
-				// if the line isn't substring of the select, move to the next line.
-				while(lineTr != null && !lineTr.split("\\s")[0].contains(substrSelect))
-				{
-					lineTr = tr.readLine();
-				}
-
 				// while gs != EOF and lineTr.idx > lineGs.idx
-				while (lineTr != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) > 0))
+				while (lineGs != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) > 0))
 				{
 					lineGs = gs.readLine();
 				}
-				while(!lineTs.equals(lineGs))
-				{
+
+				while (!lineTs.equals(lineGs)) {
 					lineTs = ts.readLine();
 				}
 
 				ts.mark(1);
 				String curr = lineTs;
-				while(lineTr != null && lineTr.split("\\s")[0].equals(lineGs.split("\\s")[0]))
-				{ //1
+				while (lineTr != null && lineTr.split("\\s")[0].equals(lineGs.split("\\s")[0])) { //1
 					//TS = GS
 					lineTs = curr;
 					ts.reset();
 					// while ts != eof and lineTs.idx == lineTr.idx
-					while(lineTs != null && lineTs.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) == 0)
-					{
+					while (lineTs != null && lineTs.split("\\s")[0].contains(substrSelect) && lineTs.split("\\s")[0].compareTo(lineTr.split("\\s")[0]) == 0) {
 						// join the two lines
 						outPutBlock.add(lineTr + lineTs.substring(lineTs.indexOf(" ")));
 						lineTs = ts.readLine();
 
 						// if output block is full, flush it to disk and clear it.
-						if(outPutBlock.size() == lineInOneBlock)
-						{
-							for(int j = 0; j < lineInOneBlock; ++j)
-							{
+						if (outPutBlock.size() == lineInOneBlock) {
+							for (int j = 0; j < lineInOneBlock; ++j) {
 								bw.write(outPutBlock.get(j) + "\n");
 //								System.out.println("New Wrote New: "+ outPutBlock.get(j));
 							}
 							outPutBlock.clear();
 						}
 					}
-					do {
-						lineTr = tr.readLine();
-					}
-					while(!lineTr.split("\\s")[0].contains(substrSelect));
-
+					lineTr = tr.readLine();
 				} //1
 				// GS = TS
-				while(!lineGs.equals(lineTs))
-				{
+				while (!lineGs.equals(lineTs)) {
 					lineGs = gs.readLine();
-					if(lineGs == null)
-					{
+					if (lineGs == null) {
 						break;
 					}
 				}
 			}
 
-			if(outPutBlock.size() != 0)
-			{
-				for(int j = 0; j < outPutBlock.size(); j++)
-				{
+			if (outPutBlock.size() != 0) {
+				for (int j = 0; j < outPutBlock.size(); j++) {
 					bw.write(outPutBlock.get(j) + "\n");
 //					System.out.println("New Wrote New: "+ outPutBlock.get(j));
 				}
@@ -417,10 +412,8 @@ public class ExternalMemoryImpl extends IExternalMemory {
 			tr.close();
 			ts.close();
 			gs.close();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 }
