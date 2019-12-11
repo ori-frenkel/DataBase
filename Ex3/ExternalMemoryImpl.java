@@ -309,7 +309,6 @@ public class ExternalMemoryImpl extends IExternalMemory {
 				}
 				outPutBlock.clear();
 			}
-			outPutBlock.clear();
 			br.close();
 			bw.close();
 		}
