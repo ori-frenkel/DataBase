@@ -325,6 +325,20 @@ public class ExternalMemoryImpl extends IExternalMemory {
 
 		// TODO implement part D
 		try {
+			// sort in1 and in2
+			String outFileName = new File(out).getName();
+			String tmpFileName1 = outFileName.substring(0, outFileName.lastIndexOf('.'))
+					+ "_intermed1a" + outFileName.substring(outFileName.lastIndexOf('.'));
+			String tmpOut1 = Paths.get(tmpPath, tmpFileName1).toString();
+			String tmpFileName2 = outFileName.substring(0, outFileName.lastIndexOf('.'))
+					+ "_intermed2a" + outFileName.substring(outFileName.lastIndexOf('.'));
+			String tmpOut2 = Paths.get(tmpPath, tmpFileName2).toString();
+
+			this.sort(in1, tmpOut1,tmpPath);
+			this.sort(in2, tmpOut2,tmpPath);
+			in1 = tmpOut1;
+			in2 = tmpOut2;
+
 			final int blockSize = 4096; // 4kb
 			final int sizeOfOneLine = 52;
 			final int lineInOneBlock = blockSize / sizeOfOneLine;
@@ -354,12 +368,13 @@ public class ExternalMemoryImpl extends IExternalMemory {
 					}
 				}
 				// while tr != EOF and lineTr.idx < lineGs.idx
-				while (lineTr != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) < 0))
+				while (lineTr != null && lineGs != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) < 0))
 				{
 					lineTr = tr.readLine();
 				}
+
 				// while gs != EOF and lineTr.idx > lineGs.idx
-				while (lineGs != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) > 0))
+				while (lineGs != null && lineTr != null && (lineTr.split("\\s")[0].compareTo(lineGs.split("\\s")[0]) > 0))
 				{
 					lineGs = gs.readLine();
 				}
@@ -411,8 +426,15 @@ public class ExternalMemoryImpl extends IExternalMemory {
 			tr.close();
 			ts.close();
 			gs.close();
+			try {
+				Files.deleteIfExists(Paths.get(tmpPath, tmpFileName1));
+				Files.deleteIfExists(Paths.get(tmpPath, tmpFileName2));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
 }
