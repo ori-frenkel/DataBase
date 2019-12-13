@@ -352,6 +352,11 @@ public class ExternalMemoryImpl extends IExternalMemory {
 				blocks.add(new BufferedReader(new FileReader(tmp_sorted_blocks), fullBlock));
 			}
 			br.close();
+			// in case noting match the given substrSelect
+			if(totalNumberOfLines == 0)
+			{
+				return;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -423,16 +428,17 @@ public class ExternalMemoryImpl extends IExternalMemory {
 		// TODO implement part D
 		try {
 			// sort in1 and in2
-
+			substrSelect = "id9";
 			File sortedInput1 = File.createTempFile("TempSortIn1A", ".txt", new File(tmpPath));
 			File sortedInput2 = File.createTempFile("TempSortIn2A", ".txt", new File(tmpPath));
-			sortedInput1.deleteOnExit();
-			sortedInput2.deleteOnExit();
 
 			// sort in1 and writing it to tmpOut1
 			sortWithSelect(in1, sortedInput1.getAbsolutePath(), substrSelect, tmpPath);
 			sortWithSelect(in2, sortedInput2.getAbsolutePath(), substrSelect, tmpPath);
 			join(sortedInput1.getAbsolutePath(), sortedInput2.getAbsolutePath(), out, tmpPath);
+
+			sortedInput1.deleteOnExit();
+			sortedInput2.deleteOnExit();
 		}
 		catch (IOException e)
 		{
